@@ -1,4 +1,4 @@
-# AerisWeather Project
+# AerisWeather Project - "Running Index"
 [![Python application (AerisWeather)](https://github.com/JSaja/AerisWeather-Project/actions/workflows/python-app.yml/badge.svg)](https://github.com/JSaja/AerisWeather-Project/actions/workflows/python-app.yml)
 
 This application takes in a user location & start time and provides a 1-5 score which describes running conditions.
