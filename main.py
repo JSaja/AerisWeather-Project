@@ -2,7 +2,6 @@ from datetime import date, datetime
 from fastapi import FastAPI, Request, Form
 from starlette.templating import Jinja2Templates, _TemplateResponse
 from fastapi.staticfiles import StaticFiles
-from dataclasses import dataclass
 import requests, json, os
 
 app = FastAPI()
