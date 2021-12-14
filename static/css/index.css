@@ -1,0 +1,57 @@
+/* || General Page */
+html {
+    height: 100%;
+}
+
+body {
+    background-color: #F5F6FA;
+    background-image: url("../img/mplsBackground.png");
+    background-position: 0px 0px;
+    background-repeat: repeat;
+    animation: animateBackground 90s infinite alternate;
+    height: 100%;
+    overflow: auto;
+}
+
+@keyframes animateBackground {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 100% 0;
+    }
+}
+
+/* || Header Elements */
+#runnerColumn {
+    display: inline-block; 
+    padding-top: 25px; 
+    padding-right: 640px;
+}
+
+#runnerPic {
+    height: 50px;
+    width: 50px;
+}
+
+/* || Form Elements */
+.field {
+    padding-bottom: 15px;
+}
+
+#locationInput {
+    width: 50%;
+}
+
+#submitGroup {
+    padding-top: 20px;
+}
+
+/* || Modal Elements */
+.modal-card-body {
+    text-align: center;
+}
+
+#modalLocation {
+    text-align: center;
+}

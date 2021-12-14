@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/png" href="../static/img/runner.png"/>
+    <!--Bulma CSS & Self. Order agnostic-->
+    <link rel="stylesheet" href="../static/bulma-0.9.3/bulma/css/bulma.min.css">
+    <link rel="stylesheet" href="../static/css/index.css">
+
+    <!-- Leaflet CSS & JS. Order matters-->
+    <link rel="stylesheet" href="../static/leaflet/leaflet.css"/>
+    <script src="../static/leaflet/leaflet.js"></script>
+
+    <!--jQuery min & Self. Order matters-->
+    <script src="../static/js/jquery-3.6.0.min.js"></script>
+    <script src="../static/js/index.js"></script>
+    <title>Running Index</title>
+</head>
+<body>
+    <script>
+        /* Only render on the homepage, otherwise user_lat will be undefined & does not load when modal is rendered, as expected.*/
+        $(document).ready(() => {
+            {% if user_lat %}
+                console.log("Map will be rendered")
+                var baseLayer = 
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: '{{ mapbox_token }}'
+                })
+
+                var tempLayer = 
+                L.tileLayer('https://maps{s}.aerisapi.com/{client_id}_{client_secret}/temperatures:{opacity}/{z}/{x}/{y}/current.png', {
+                    client_id: '{{ client_id }}',
+                    client_secret: '{{ client_secret }}',
+                    opacity: 22,
+                    subdomains: '1234',
+                    attribution: '<a href="https://www.aerisweather.com/">&copy;AerisWeather</a>'
+                })
+
+                var map = L.map('map', {layers: [baseLayer]}).setView([ {{user_lat}} , {{ user_long }} ], 12);
+                L.control.layers({"Default":baseLayer},  {"Temp Color (AerisWeather)": tempLayer}).addTo(map);                
+
+                map.on('click', function onMapClick(e) {
+                    lat_long_string = e.latlng.lat.toFixed(4) + ", " + e.latlng.lng.toFixed(4)
+                    L.popup()
+                    .setLatLng(e.latlng)
+                    .setContent("You have selected: (" + lat_long_string + ")")
+                    .openOn(map);
+
+                    $('#locationInput').prop("value", lat_long_string);
+                });
+                
+                $('#reset').click(function() {
+                    console.log("Reset was clicked")
+                    map.closePopup();
+                });
+
+            {% endif %}
+        });
+    </script>
+
+    <section class="section">
+        <div class="container">
+
+            <div class="columns">
+                <div class="column">
+                    <h1 class="title">Running Index</h1>
+                    <p class="subtitle">Know the best time to go for a run.</p>
+                </div>
+                <div class="column" id="runnerColumn">
+                    <img src="../static/img/runner.png" id="runnerPic">
+                </div>
+            </div>
+
+            <form action="/" method="post">
+                <!--Pass user location info in case it needs to be resent upon error-->
+                <input type="hidden" value="{{ user_lat }}" name="user_lat">
+                <input type="hidden" value="{{ user_long }}" name="user_long">
+                <input type="hidden" value="{{ user_city }}" name="user_city">
+                <input type="hidden" value="{{ user_state }}" name="user_state">
+
+                <div class="field">
+                    <label class="label">Location</label>
+                    <div class="control">
+                        <input class="input {{ is_danger }}" type="text" value="{{ user_city }}, {{ user_state }}" placeholder="Enter city, state - or zip code." id="locationInput" name="location_input">
+                    </div>
+                    <p class="help is-danger">{{ error_description }}</p>
+                </div>
+
+                <div class="block">
+                    <label class="label">Or, select a Map Location.</label>
+                    <div id="map" style="height: 325px; width: 50%;"></div>
+                </div>
+            
+                <div class="field">
+                    <label class="label">Expected Start Time (Today)</label>
+                    <div class="control">
+                        <input type="time" class="is-size-5" value="{{ current_time }}" name="time_start">
+                    </div>
+                </div>          
+            
+                <div class="field is-grouped" id="submitGroup">
+                    <div class="control">
+                        <button class="button is-link" id="modalEnable">Submit</button>
+                    </div>
+                    <div class="control">
+                        <input type="reset" id="reset" class="button is-link is-light"></input>
+                    </div>
+                </div>
+            </form>
+            
+            <!--Modal is hidden by default -->
+            <div class="modal {{ activate_modal }}">
+                <div class="modal-background" id="modalDisable"></div>
+                    <div class="modal-card">
+
+                        <header class="modal-card-head">
+                            <p class="modal-card-title">Run Score</p>
+                            <button class="delete" aria-label="close"></button>
+                        </header>
+
+                        <section class="modal-card-body">
+                            <p class="title" id="modalLocation">{{ location_input }}</p>
+                            <p class="subtitle is-size-3">@ {{ time_am_pm }}</p>
+                            <div class="columns">
+                                <div class="column">
+                                    <img src="../static/img/card_{{ final_score }}.png">
+                                </div>
+                            </div>
+
+                            <div class="block">
+                                <p class="is-size-3">{{ weather }} - Will feel like {{ feels_like_f }} &#x2109;</p>
+                            </div>
+
+                            <div class="columns">
+                                <div class="column">
+                                    <button class="button is-light is-size-4">Temp🌡: {{ temp_f }} &#x2109;</button></br>
+                                    <button class="button is-light is-size-4">Humidity💦: {{ humidity }}%</button></br>
+                                    <button class="button is-light is-size-4">Wind💨: {{ wind_speed_mph }} MPH {{ wind_dir }}</button></br>
+                                    <button class="button is-light is-size-4">Rain/Snow☔❄: {{ rain_snow }} Inches</button></br>
+                                </div>
+                            </div>
+                        </section>
+    
+                        <footer class="modal-card-foot">
+                        </footer>
+                    </div>  
+            </div>
+        </div>
+    </section>
+</body>
+</html>
