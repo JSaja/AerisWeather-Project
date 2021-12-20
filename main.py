@@ -12,7 +12,6 @@ client_id = os.getenv("AERISWEATHER_CLIENT_ID")
 client_secret = os.getenv("AERISWEATHER_CLIENT_SECRET")
 mapbox_token = os.getenv("MAPBOX_TOKEN")
 
-
 @app.get("/")
 def root(request: Request) -> _TemplateResponse:
     """Renders homepage. Gets user location data to load personalized Leaflet map. Loads current time"""

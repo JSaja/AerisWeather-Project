@@ -23,7 +23,6 @@
         /* Only render on the homepage, otherwise user_lat will be undefined & does not load when modal is rendered, as expected.*/
         $(document).ready(() => {
             {% if user_lat %}
-                console.log("Map will be rendered")
                 var baseLayer = 
                 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -32,22 +31,22 @@
                     tileSize: 512,
                     zoomOffset: -1,
                     accessToken: '{{ mapbox_token }}'
-                })
+                });
 
                 var tempLayer = 
                 L.tileLayer('https://maps{s}.aerisapi.com/{client_id}_{client_secret}/temperatures:{opacity}/{z}/{x}/{y}/current.png', {
+                    attribution: '<a href="https://www.aerisweather.com/">&copy;AerisWeather</a>',
                     client_id: '{{ client_id }}',
                     client_secret: '{{ client_secret }}',
                     opacity: 22,
-                    subdomains: '1234',
-                    attribution: '<a href="https://www.aerisweather.com/">&copy;AerisWeather</a>'
-                })
+                    subdomains: '1234'
+                });
 
-                var map = L.map('map', {layers: [baseLayer]}).setView([ {{user_lat}} , {{ user_long }} ], 12);
+                var map = L.map('map', {layers: [baseLayer]}).setView([ {{ user_lat }} , {{ user_long }} ], 12);
                 L.control.layers({"Default":baseLayer},  {"Temp Color (AerisWeather)": tempLayer}).addTo(map);                
 
                 map.on('click', function onMapClick(e) {
-                    lat_long_string = e.latlng.lat.toFixed(4) + ", " + e.latlng.lng.toFixed(4)
+                    lat_long_string = e.latlng.lat.toFixed(4) + ", " + e.latlng.lng.toFixed(4);
                     L.popup()
                     .setLatLng(e.latlng)
                     .setContent("You have selected: (" + lat_long_string + ")")
@@ -57,7 +56,6 @@
                 });
                 
                 $('#reset').click(function() {
-                    console.log("Reset was clicked")
                     map.closePopup();
                 });
 
