@@ -1,4 +1,6 @@
-# AerisWeather Project
+# AerisWeather Project - "Running Index"
+[![Python application (AerisWeather)](https://github.com/JSaja/AerisWeather-Project/actions/workflows/python-app.yml/badge.svg)](https://github.com/JSaja/AerisWeather-Project/actions/workflows/python-app.yml)
+
 This application takes in a user location & start time and provides a 1-5 score which describes running conditions.
 
 This project utilizes the following tools:
@@ -15,6 +17,6 @@ This project utilizes the following tools:
 | <a href="https://ipinfo.io/"><img src="https://ipinfo.io/static/images/layout/logo.svg" alt="ipinfo" style="height:30px;width:90px;"></a> | <a href="https://www.aerisweather.com/"><img src="https://www.aerisweather.com/img/logo-hero-dark.png" alt="AerisWeather" style="height:35px;width:100px;"></a> | <a href="https://www.mapbox.com/"><img src="https://assets.website-files.com/5d3ef00c73102c436bc83996/5d3ef00c73102c893bc83a28_logo-regular-p-500.png" alt="Mapbox" style="height:55px;width:110px;"></a>
 
 ## Utilities
-| Mapping | Testing |
-| :-:     | :-:     |
-| <a href="https://leafletjs.com/"><img src="https://leafletjs.com/docs/images/logo.png" alt="Leaflet" style="height:30px;width:100px;"></a> | <a href="https://docs.pytest.org/en/6.2.x/"><img src="https://docs.pytest.org/en/6.2.x/_static/pytest1.png" alt="PyTest" style="height:50px;width:50px;"></a><p>And</p><a href="https://github.com/actions"><img src="https://avatars.githubusercontent.com/u/44036562?s=200&v=4" style="height:50px;width:50px;"></a>
+| Mapping | Testing | Compatibility |
+| :-:     | :-:     | :-:           |
+| <a href="https://leafletjs.com/"><img src="https://leafletjs.com/docs/images/logo.png" alt="Leaflet" style="height:30px;width:100px;"></a> | <a href="https://docs.pytest.org/en/6.2.x/"><img src="https://docs.pytest.org/en/6.2.x/_static/pytest1.png" alt="PyTest" style="height:50px;width:50px;"></a><p>And</p><a href="https://github.com/actions"><img src="https://avatars.githubusercontent.com/u/44036562?s=200&v=4" style="height:50px;width:50px;"></a> | <a href=""><img src="https://miro.medium.com/max/750/1*Z14kLUEB69SsYdNORxQzlw.jpeg" style="height:115px;width:175px;"></a>
